@@ -1,0 +1,4 @@
+venv/
+Mana.db
+**/config.py
+Bot_os/__pycache__
