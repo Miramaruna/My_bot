@@ -34,6 +34,15 @@ dp = Dispatcher()
 admin = 5626265763
 admin2 = 45
 
+logging.basicConfig(
+level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler("bot.log"), 
+        logging.StreamHandler()          
+    ]
+)
+
 class BroadcastForm(StatesGroup):
     waiting_for_message = State()
 
@@ -89,7 +98,7 @@ async def save_admin(message: Message, state: FSMContext):
     await state.clear()
 
 async def accept_admin(message, idi, first_name):
-    if message == 'bugi':
+    if message == 'gavno':
         cursor.execute(f"SELECT user_id FROM admin WHERE user_id = {idi}")
         pop = cursor.fetchall()
         connection.commit()
@@ -111,7 +120,6 @@ async def create_farm(idi):
         cursor.execute("INSERT INTO farm(user_id, size, lvl) VALUES(?, ?, ?)", (idi, 100, 1))
         connection.commit()
         await bot.send_message(idi, "--Армия--\nЛюдей - 100\nlvl - 1", reply_markup=arm_kb)
-
 
 async def afk_farm():
     while True:
@@ -146,7 +154,7 @@ async def start_farm(idi):
     while fm_t:
         await update_balance(idi, 10, result)
         await bot.send_message(idi, f"Вам начислено {50 + result} монет с фермы")
-        print(f'Начислено 50 монет пользователю с ID {idi}')
+        print(f'Начислено {50 + result} монет пользователю с ID {idi}')
         await asyncio.sleep(60)
 
 @dp.callback_query(F.data == 'sp')
@@ -162,7 +170,7 @@ async def sp_farm(callback: CallbackQuery):
 async def update_balance(idi, money, people):
 
     cursor.execute(f"UPDATE users SET cash = cash + ? WHERE user_id = ?", (money+people, idi))
-    connection.commit()
+    connection.commit() 
 
 # @dp.message()
 async def echo(message: Message):
