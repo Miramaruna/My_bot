@@ -1,19 +1,18 @@
-# sqlite3
 
 import sqlite3, random, time, asyncio
-
-# aiogram
 
 from aiogram import F, Router
 from aiogram.types import Message, KeyboardButton, ReplyKeyboardMarkup, CallbackQuery, BotCommand
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
+from aiogram.filters import ChatMemberUpdatedFilter
 
 from aiogram import types
 from aiogram.fsm.storage.memory import MemoryStorage
-from aiogram.types import ContentType
+from aiogram.types import ContentType, ChatMemberUpdated
 from aiogram.exceptions import TelegramBadRequest
+from aiogram.enums import ChatMemberStatus
 
 from app.keyboard import *
 from app.BD import *
@@ -91,22 +90,22 @@ async def start_bot(message: Message):
         cursor.execute("INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?)",(message.from_user.id, message.from_user.first_name, 0, 500, None, None, None))
         connection.commit()
         await message.reply("Регистрация прошла успешно прошла успешно!👌")
-        await message.reply(f"Вы были зарегистрированы под именем {message.from_user.id}")
+        await message.reply(f"Вы были зарегистрированы под именем {message.from_user.first_name}")
     else:
         await message.reply("Аккаунт существует😉")
     await message.reply("Успешно выполнено!😄")
 
 @router.message(Command("help"))
 async def help(message: Message):
-    await message.reply("Привет помочь?\nКоманда старта📍 - /start\nИнформация🤔 - /info \nЕсли нужна помощь обращяйся по это команде😄 - /help\nПрописные команды ниже\nПрофиль🧩\n geeks🕵\n register💻\n копать💰\n /transfer📲\n Ферма🔫\n Инвентарь📁\n /shop🏪\n/kazino🎰", reply_markup=keyboard_start) 
+    await message.reply("Привет помочь?\nКоманда старта📍 - /start\nИнформация🤔 - /info \nЕсли нужна помощь обращяйся по это команде😄 - /help\nПрописные команды ниже\nПрофиль🧩\n geeks🕵\n register💻\n копать💰\n /transfer📲\n Ферма🔫\n Инвентарь📁\n /shop🏪\n/kazino🎰\nдать 'число'\n удалить(сообщение)\n trading📈\n/start_game(крестики нолики)\nАрмия🪖", reply_markup=keyboard_start) 
 
 @router.message(Command("commands"))
 async def commands(message: Message):
-    await message.answer("/start\n/info\n/help\ngeeks\nregister\n/play\n/профиль\nкопать\nФерма\n/transfer\nИнвентарь\n/shop\n/kazino\n/ban\n/delete\n/ban_admin\n/transfer\n/передача\nusers\nкалькулятор")
+    await message.answer("/start\n/info\n/help\ngeeks\nregister\n/play\n/профиль\nкопать\nФерма\n/transfer\nИнвентарь\n/shop\n/kazino\n/ban\n/delete\n/ban_admin\n/transfer\n/передача\nusers\nкалькулятор\nArmy\nсражаться\nдать\nудалить")
 
 @router.message(Command("info"))
 async def info(message: Message):
-    await message.reply("Привет!✋\nЭто информация о моем боте\nМой бот обычные слова воспринимает как эхо тоесть он не будет повторять слова\nА будет писать значение по умолчанию как (pon)\nНа этом у меня все!🤓\nУдачи!\n/start \nVersion == 2.2.0💫", reply_markup=keyboard_info) 
+    await message.reply("Привет!✋\nЭто информация о моем боте\nМой бот обычные слова воспринимает как эхо тоесть он не будет повторять слова\nА будет писать значение по умолчанию как (pon)\nНа этом у меня все!🤓\nУдачи!\n/start \nVersion == 2.2.1💫", reply_markup=keyboard_info) 
 
 @router.message(F.text == "geeks")
 async def info(message: Message):
@@ -146,29 +145,37 @@ class Delete(StatesGroup):
 
 @router.message(Command("delete"))
 async def delete(message: Message, state: FSMContext):
-    await message.reply("Введите ID пользователя чтоб удалить его😨")
+    await message.reply("Введите ID пользователя чтоб удалить его😨\nотмена - отмена")
     await state.set_state(Delete.id) 
 
     @router.message(Delete.id)
     async def delete_accept(message: Message, state: FSMContext):
             cursor.execute(f"SELECT user_id FROM admin WHERE user_id = {message.from_user.id}")
-            admin = cursor.fetchall()
+            a = cursor.fetchall()
+            admink = a[0]
             connection.commit()
             try:
-                if admin != []:
-                    cursor.execute("DELETE FROM users WHERE user_id = ?", (message.text,))
-                    connection.commit()
-                    await message.reply("Удаление прошло успешно!😢")
-                    await message.reply("/start")
-                    await state.clear()
+                if message.text != 'отмена':
+                    if admink != []:
+                        if int(message.text) != admin:
+                            cursor.execute("DELETE FROM users WHERE user_id = ?", (message.text,))
+                            connection.commit()
+                            await message.reply("Удаление прошло успешно!😢")
+                            await bot.send_message(admin, f"Пользователь - {message.text} удален админом - {admink}!❗️")
+                            await state.clear()
+                        else:
+                            await message.answer("ТЫ слишком глупп удалить владельца бота😂")
+                            await bot.send_message(admin, f"На вас пытались покушится пользователь с ID - {admink}🤦‍♂️")
+                            await state.clear()
+                    else:
+                        await message.reply("Недастаточно прав 😂")
+                        await state.clear()
                 else:
-                    await message.reply("Недастаточно прав 😂")
-                    await message.reply("/start")
+                    await message.answer("Отмена✅")
                     await state.clear()
             except BaseException as e:
                 await message.reply("Error")
                 print(e)
-                await message.reply("/start")
 
 @router.message(F.photo)
 async def get_photo(message: Message):
@@ -176,9 +183,14 @@ async def get_photo(message: Message):
 
 @router.message(F.text == 'копать')
 async def kopat(message: Message):
-        await message.reply(f"Вы заработали: 500💵")
-        cursor.execute("UPDATE users SET cash = cash + ? WHERE user_id = ?", (500, message.from_user.id))
-        connection.commit()
+        cursor.execute(f"SELECT user_id FROM users WHERE user_id = {message.from_user.id}")
+        p = cursor.fetchone()
+        if p != None:
+            await message.reply(f"Вы заработали: 500💵")
+            cursor.execute("UPDATE users SET cash = cash + ? WHERE user_id = ?", (500, message.from_user.id))
+            connection.commit()
+        else:
+            await message.answer("Заригистрируйтесь чтоб можно было зарабатывать игровуй валюту!🙂")
 
 @router.message(Command('transfer'))
 async def transfer_pol(message: Message):
@@ -211,6 +223,49 @@ async def transfer_pol(message: Message):
     except Exception as e:
         connection.rollback()
         await message.reply(f"Ошибка: {e}")
+
+@router.message(F.text.startswith('дать'))
+async def give_currency(message: Message):
+    if not message.reply_to_message:
+        await message.reply("Вы должны ответить на сообщение пользователя, чтобы передать валюту.")
+        return
+
+    try:
+        parts = message.text.split()
+        if len(parts) < 2:
+            await message.reply("Вы должны указать сумму. Пример: дать 100")
+            return
+        
+        amount = int(parts[1])
+
+        if amount <= 0:
+            await message.reply("Сумма должна быть положительной.")
+            return
+
+    except ValueError:
+        await message.reply("Некорректная сумма. Пример: дать 100")
+        return
+
+    from_user_id = message.from_user.id
+    to_user_id = message.reply_to_message.from_user.id
+
+
+    cursor.execute(F"SELECT cash FROM users WHERE user_id = {message.from_user.id}")
+    c = cursor.fetchone()
+    cash = c[0]
+    if cash < amount:
+        await message.reply("У вас недостаточно средств.")
+        return
+
+
+    cursor.execute(F"UPDATE users SET cash = cash - {-amount} WHERE user_id = {from_user_id}")
+    cursor.execute(F"UPDATE users SET cash = cash + {amount} WHERE user_id = {to_user_id}")
+
+    await message.reply(f"Вы передали {amount} игровой валюты пользователю {message.reply_to_message.from_user.full_name}.")
+    await message.bot.send_message(
+        to_user_id, f"Вам было передано {amount} игровой валюты от {message.from_user.full_name}."
+    )
+    connection.commit()
 
 @router.message(Command('передача'))
 async def transfer_pol(message: Message):
@@ -509,10 +564,17 @@ async def ban_admin(message: Message, state:FSMContext):
 
     @router.message(Ban.id)
     async def ban_admin_True(message: Message, state: FSMContext):
-        cursor.execute(f"DELETE FROM admin WHERE user_id = {message.text}")
-        connection.commit()
-        await message.reply("Удаление прошло успешно!✅")
-        await state.clear()
+        cursor.execute(f"SELECT user_id FROM admin WHERE user_id = {message.text}")
+        a = cursor.fetchone()
+        adma = a[0]
+        if adma != None:
+            cursor.execute(f"DELETE FROM admin WHERE user_id = {message.text}")
+            connection.commit()
+            await bot.send_message(message.text, f"Вы были удалены админом {message.from_user.first_name}")
+            await message.reply("Удаление прошло успешно!✅")
+            await state.clear()
+        else:
+            await message.answer("Такого админа нет🙅‍♂️")
 
 class Kazino(StatesGroup):
     stavka = State()
@@ -530,13 +592,13 @@ async def winorlos(message: Message, state:FSMContext):
     acc = accept_kazino(stavka, message.from_user.id)
     if acc == True:
         if ran == vygrysh:
-            stavka = stavka * 2
+            stavka = stavka * random.randint(1.1, 2)
             await message.answer(f"Вы выйграли - {stavka}!🤑")
             cursor.execute(f"UPDATE users SET cash = cahs + ? WHERE user_id = ?", (stavka, message.from_user.id))
             connection.commit()
             await state.clear()
         else:
-            await message.answer("Вы проиграли!😭")
+            await message.answer(f"Вы проиграли!😭, ваша ставка - {stavka}")
             cursor.execute(f"UPDATE users SET cash = cash - ? WHERE user_id = ?", (stavka, message.from_user.id))
             connection.commit()
             await state.clear()
@@ -551,6 +613,294 @@ async def accept_kazino(stavka, idi2):
         acc = True
     else: 
         acc = False
+
+@router.message(Command("help_admin"))
+async def help_admin(message: Message):
+    cursor.execute(F"SELECT user_id FROM admin WHERE user_id = {message.from_user.id}")
+    a = cursor.fetchone()
+    connection.commit()
+    if a != None:
+        await message.answer("Вот команды для админов:\n/delete - Для удаление скамеров🤡 и плохих людей❗️\nban - команда для создателя бойтесь ее💀")
+    else:
+        await message.answer('Сперва админом стань😐')
+
+@router.chat_member(ChatMemberUpdatedFilter(member_status_changed=True))
+async def on_bot_added_to_group(message: Message, event: ChatMemberUpdated):
+    if event.new_chat_member.status == "member":
+        chat_id = event.chat.id
+        await bot.send_message(chat_id, "Привет! Я бот. Спасибо за добавление в группу!")
+
+@router.message(F.text == 'удалить')
+async def delete_message_on_command(message: Message):
+    member = await bot.get_chat_member(chat_id=message.chat.id, user_id=message.from_user.id)
+    if member.status == ChatMemberStatus.ADMINISTRATOR:
+        if message.reply_to_message:
+            try:
+                await bot.delete_message(chat_id=message.chat.id, message_id=message.reply_to_message.message_id)
+            except Exception as e:
+                await message.reply(f"Не удалось удалить сообщение: {e}")
+        else:
+            await message.reply("Вы должны ответить на сообщение, чтобы удалить его.")
+    else:
+        await message.answer('Стань админом сперва😒')
+
+class Trading(StatesGroup):
+    n = State()
+
+@router.message(F.text == "Trading")
+async def trading(message: Message, state:FSMContext):
+    await message.answer("Введите куда пойдет рынок\nВниз📉\nНавверх📈")
+    await state.set_state(Trading.n)
+
+@router.message(Trading.n)
+async def trade(message: Message, state:FSMContext):
+    choice = random.choice(['Вниз', 'Навверх'])
+    try:
+        if message.text == choice:
+            win = random.randint(1000, 10000)
+            await message.answer(f"Вы угадали ваша прибыль - {win}💰")
+            await state.clear()
+        else:
+            lose = random.randint(1000, 10000)
+            await message.answer(f"Вы не угадали вы потеряли - {lose}🥲")
+            await state.clear()
+    except BaseException as e:
+        await message.answer(f"Ошибка: {e}")
+
+@router.message(F.text.in_({'Армия','армия','Army'}))
+async def army(message: Message):
+    cursor.execute(F"SELECT user_id FROM army WHERE user_id = {message.from_user.id}")
+    u = cursor.fetchone()
+    connection.commit
+    if u == None:
+        cursor.execute("INSERT INTO army(user_id, soldiers, cars, tanks) VALUES(?, ?, ?, ?)", (message.from_user.id, 10, 2, 1))
+        connection.commit()
+        await message.answer("Армия создана!🪖")
+    else:
+        cursor.execute(f"SELECT soldiers FROM army WHERE user_id = {message.from_user.id}")
+        s = cursor.fetchone()
+        soldiers = s[0]
+        cursor.execute(f"SELECT cars FROM army WHERE user_id = {message.from_user.id}")
+        c = cursor.fetchone()
+        cars = c[0]
+        cursor.execute(f"SELECT tanks FROM army WHERE user_id = {message.from_user.id}")
+        t = cursor.fetchone()
+        tanks = t[0]
+        connection.commit()
+        balls = soldiers + (cars * 5) + (tanks * 20)
+        need = (cars * 3) + (tanks *4)
+        if soldiers <= need:
+            await message.answer(f"Не хватка Солдат!{soldiers - need}", reply_markup=armmy_kb)
+        else:
+            await message.answer(f"--Армия--\nСолдаты - {soldiers - need}🪖\nМашины - {cars}🛻\nТанки - {tanks}💥\nБаллы - {balls}", reply_markup=armmy_kb)
+
+@router.callback_query(F.data == 'sol')
+async def add_soldiers(callback: CallbackQuery):
+    acc = await army_accept(callback.from_user.id, 100)
+    if acc == True:
+        await add_army_slodiers(callback.from_user.id, 100, 10)
+        await callback.message.answer("10 Солдат успешно прибыли в вашу армию!🪖")
+    else:
+        await callback.message.answer("Не достаточно денег📉")
+
+async def army_accept(id, price):
+    cursor.execute(f"SELECT cash FROM users WHERE user_id = {id}")
+    c = cursor.fetchone()
+    cash = c[0]
+    if cash >= price:
+        return True
+    else: 
+        return False
+    
+async def add_army_slodiers(id, price, number):
+    cursor.execute("UPDATE army SET soldiers = soldiers + ? WHERE user_id = ?", (number, id))
+    cursor.execute("UPDATE users SET cash = cash - ? WHERE user_id = ?", (price, id))
+    connection.commit()
+
+@router.callback_query(F.data == 'car')
+async def add_сars(callback: CallbackQuery):
+    acc = await army_accept(callback.from_user.id, 1000)
+    if acc == True:
+        await add_army_cars(callback.from_user.id, 1000, 5)
+        await callback.message.answer("5 Машин успешно прибыли в вашу армию!🪖")
+    else:
+        await callback.message.answer("Не достаточно денег📉")
+
+async def add_army_cars(id, price, number):
+    cursor.execute("UPDATE army SET cars = cars + ? WHERE user_id = ?", (number, id))
+    cursor.execute("UPDATE users SET cash = cash - ? WHERE user_id = ?", (price, id))
+    connection.commit()
+
+@router.callback_query(F.data == 'tan')
+async def add_tanks(callback: CallbackQuery):
+    acc = await army_accept(callback.from_user.id, 3000)
+    if acc == True:
+        await add_army_tanks(callback.from_user.id, 3000, 1)
+        await callback.message.answer("1 Танк успешно прибыли в вашу армию!🪖")
+    else:
+        await callback.message.answer("Не достаточно денег📉")
+
+async def add_army_tanks(id, price, number):
+    cursor.execute("UPDATE army SET tanks = tanks + ? WHERE user_id = ?", (number, id))
+    cursor.execute("UPDATE users SET cash = cash - ? WHERE user_id = ?", (price, id))
+    connection.commit()
+
+def get_army(user_id):
+    cursor.execute('SELECT soldiers, cars, tanks FROM army WHERE user_id = ?', (user_id,))
+    result = cursor.fetchone()
+    return {'soldiers': result[0], 'cars': result[1], 'tanks': result[2]} if result else None
+
+def calculate_army_strength(army):
+    soldiers = army['soldiers']
+    cars = army['cars']
+    tanks = army['tanks']
+    
+    needed_soldiers_for_cars = cars * 3
+    needed_soldiers_for_tanks = tanks * 4
+    total_needed_soldiers = needed_soldiers_for_cars + needed_soldiers_for_tanks
+    
+    if soldiers < total_needed_soldiers:
+        return None 
+    
+    remaining_soldiers = soldiers - total_needed_soldiers
+    strength = remaining_soldiers + (cars * 5) + (tanks * 20)
+    return strength
+
+@router.message(F.text == 'cражаться')
+async def battle(message: Message):
+    if not message.reply_to_message:
+        await message.answer("Сражение возможно только если вы ответите на сообщение соперника.")
+        return
+    
+    user_1_id = message.from_user.id
+    user_2_id = message.reply_to_message.from_user.id
+    
+    army_1 = get_army(user_1_id)
+    army_2 = get_army(user_2_id)
+    
+    if not army_1 or not army_2:
+        await message.answer("Не удалось найти армии одного из пользователей.")
+        return
+    
+    strength_1 = calculate_army_strength(army_1)
+    strength_2 = calculate_army_strength(army_2)
+    
+    if strength_1 is None:
+        await message.answer(f"У пользователя {message.from_user.username} недостаточно солдат для управления машинами и танками.")
+        return
+    
+    if strength_2 is None:
+        await message.answer(f"У пользователя {message.reply_to_message.from_user.username} недостаточно солдат для управления машинами и танками.")
+        return
+    
+    if strength_1 > strength_2:
+        result_message = f"Победитель: {message.from_user.username}!\nСила армии: {strength_1} баллов против {strength_2}."
+    elif strength_1 < strength_2:
+        result_message = f"Победитель: {message.reply_to_message.from_user.username}!\nСила армии: {strength_2} баллов против {strength_1}."
+    else:
+        result_message = f"Ничья! Обе армии имеют одинаковую силу: {strength_1} баллов."
+    
+    await message.answer(result_message)
+
+@router.message(F.text == "admin")
+async def adminka(message: Message):
+    await message.answer("Админка:🤠", reply_markup=admin_kb)
+
+
+
+games = {}
+
+def create_board():
+    return [[" " for _ in range(3)] for _ in range(3)]
+
+def check_victory(board, symbol):
+    for row in board:
+        if row.count(symbol) == 3:
+            return True
+    for col in range(3):
+        if [board[row][col] for row in range(3)].count(symbol) == 3:
+            return True
+    if [board[i][i] for i in range(3)].count(symbol) == 3 or [board[i][2 - i] for i in range(3)].count(symbol) == 3:
+        return True
+    return False
+
+def check_draw(board):
+    for row in board:
+        if " " in row:
+            return False
+    return True
+
+def display_board(board):
+    return "\n".join([" | ".join(row) for row in board])
+
+def generate_keyboard(board):
+    builder = InlineKeyboardBuilder()
+    for i in range(3):
+        buttons = []
+        for j in range(3):
+            if board[i][j] == " ":
+                buttons.append(InlineKeyboardButton(text="⬜", callback_data=f"move_{i},{j}"))
+            else:
+                buttons.append(InlineKeyboardButton(text=board[i][j], callback_data=f"taken_{i},{j}"))
+        builder.row(*buttons)
+    return builder.as_markup()
+
+def bot_move(board):
+    empty_cells = [(i, j) for i in range(3) for j in range(3) if board[i][j] == " "]
+    return random.choice(empty_cells)
+
+@router.message(Command("start_game"))
+async def start_game(message: Message):
+    games[message.chat.id] = create_board()
+    await message.answer(f"Игра началась! Вы играете крестиками (X).\nВаш ход:\n{display_board(games[message.chat.id])}", reply_markup=generate_keyboard(games[message.chat.id]))
+
+@router.callback_query()
+async def handle_move(call: CallbackQuery):
+    if not (call.data.startswith("move_") or call.data.startswith("taken_")):
+        return
+
+    game = games.get(call.message.chat.id)
+
+    if not game:
+        await call.message.answer("Игра не найдена.")
+        return
+
+    if call.data.startswith("taken"):
+        await call.answer("Эта клетка уже занята!")
+        return
+
+    if call.data.startswith("move"):
+        i, j = map(int, call.data.split("_")[1].split(","))
+        if game[i][j] != " ":
+            await call.answer("Эта клетка уже занята!")
+            return
+
+        game[i][j] = "X"
+
+        if check_victory(game, "X"):
+            await call.message.edit_text(f"Поздравляем! Вы победили!\n{display_board(game)}")
+            games.pop(call.message.chat.id)
+            return
+
+        if check_draw(game):
+            await call.message.edit_text(f"Ничья!\n{display_board(game)}")
+            games.pop(call.message.chat.id)
+            return
+
+        bot_i, bot_j = bot_move(game)
+        game[bot_i][bot_j] = "O"
+
+        if check_victory(game, "O"):
+            await call.message.edit_text(f"Бот победил!\n{display_board(game)}")
+            games.pop(call.message.chat.id)
+            return
+
+        if check_draw(game):
+            await call.message.edit_text(f"Ничья!\n{display_board(game)}")
+            games.pop(call.message.chat.id)
+            return
+
+        await call.message.edit_text(f"Ваш ход:\n{display_board(game)}", reply_markup=generate_keyboard(game))
 
 @router.message(Command("play"))
 async def play_bot(message: Message):

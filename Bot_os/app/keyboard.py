@@ -44,3 +44,17 @@ car = [
     [KeyboardButton(text='BMW')]
 ]
 car_kb = ReplyKeyboardMarkup(keyboard=car, resize_keyboard=True, one_time_keyboard=True)
+
+ar = [
+    [InlineKeyboardButton(text='Ad. Soldiers', callback_data='sol')],
+    [InlineKeyboardButton(text='Ad. Cars', callback_data='car')],
+    [InlineKeyboardButton(text='Ad. Tanks', callback_data='tan')]
+]
+armmy_kb = InlineKeyboardMarkup(inline_keyboard=ar)
+
+admin = [
+    [KeyboardButton(text='stop'), KeyboardButton(text='/передача')],
+    [KeyboardButton(text="ban_admin"), KeyboardButton(text="ban_admin")],
+    [KeyboardButton(text="delete"), KeyboardButton(text="/mailing")]
+]
+admin_kb = ReplyKeyboardMarkup(keyboard=admin, resize_keyboard=True, one_time_keyboard=True)

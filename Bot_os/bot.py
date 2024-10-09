@@ -119,7 +119,7 @@ async def accept_admin(message, idi, first_name):
 async def create_farm(idi):
         cursor.execute("INSERT INTO farm(user_id, size, lvl) VALUES(?, ?, ?)", (idi, 100, 1))
         connection.commit()
-        await bot.send_message(idi, "--Армия--\nЛюдей - 100\nlvl - 1", reply_markup=arm_kb)
+        await bot.send_message(idi, "--Ферма--\nЛюдей - 100\nlvl - 1", reply_markup=arm_kb)
 
 async def afk_farm():
     while True:
@@ -129,7 +129,7 @@ async def afk_farm():
             user_id = user[0]
             await balance(user_id, 10)
             print(f'Начислено 10 монет пользователю с ID {user_id}')
-            await bot.send_message(user_id, "Ежедневное вознагрождение по 10 мин каждые")
+            await bot.send_message(user_id, "Вознагрождение по 10 мин каждые")
 
         await asyncio.sleep(600)
 
@@ -172,9 +172,10 @@ async def update_balance(idi, money, people):
     cursor.execute(f"UPDATE users SET cash = cash + ? WHERE user_id = ?", (money+people, idi))
     connection.commit() 
 
-# @dp.message()
-async def echo(message: Message):
-    await message.answer("pon")
+@dp.message(F.text == 'stop')
+async def stop(message: Message, state: FSMContext):
+    await message.answer("Бот остановлен!🔑")
+    await dp.stop_polling()
 
 # start
 
@@ -188,7 +189,6 @@ async def on_startup():
 
 async def main():
     await on_startup()
-    logging.info("БОТ ЗАПУЩЕН")
     asyncio.create_task(afk_farm())
     await bot.delete_webhook(drop_pending_updates=True)
     dp.include_router(router)
