@@ -3,5 +3,4 @@ Mana.db
 **/config.py
 **/__pycache__
 Zam.py
-BD.py
 test.py
