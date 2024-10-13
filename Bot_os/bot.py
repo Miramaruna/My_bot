@@ -174,8 +174,11 @@ async def update_balance(idi, money, people):
 
 @dp.message(F.text == 'stop')
 async def stop(message: Message, state: FSMContext):
-    await message.answer("Бот остановлен!🔑")
-    await dp.stop_polling()
+    if message.from_user.id == admin:
+        await message.answer("Бот остановлен!🔑")
+        await dp.stop_polling()
+    else:
+        message.answer("Такой команды нет!")
 
 # start
 
