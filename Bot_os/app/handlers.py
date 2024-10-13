@@ -111,22 +111,44 @@ async def info(message: Message):
 async def info(message: Message):
     await message.answer('Научился я этому в учебном месте GEEKS это хорошое место для изучения программирования а также других сфер \nКак дизайн программирования для телефона и т.д\n/start', reply_markup=keyboard_start) 
 
+async def get_user_data(user_id):
+
+    cursor.execute("SELECT name, wins, cash FROM users WHERE user_id = ?", (user_id,))
+    result = cursor.fetchone()
+
+    if result:
+        return {'name': result[0], 'wins': result[1], 'cash': result[2]}
+    return None
+
 @router.message(F.text == "профиль")
 async def info_profile(message : Message):
-    cursor.execute(f"SELECT user_id FROM admin WHERE user_id = {message.from_user.id}")
-    u = cursor.fetchone()
-    cursor.execute(f"SELECT wins FROM users WHERE user_id = {message.from_user.id}")
-    w = cursor.fetchone()
-    cursor.execute(f"SELECT cash FROM users WHERE user_id = {message.from_user.id}")
-    m = cursor.fetchone()
-    connection.commit()
-    wins = w[0]
-    money = m[0]
-    if u is None:
-        user_id = None
+    user_id = message.from_user.id
+
+    user_info = await get_user_data(user_id)
+
+    if user_info:
+        name = user_info['name']
+        wins = user_info['wins']
+        cash = user_info['cash']
+    
+    cursor.execute(F"SELECT user_id FROM admin WHERE user_id = {message.from_user.id}")
+    a = cursor.fetchone()
+    admin_id = a[0]
+
+    if message.chat.type == 'private':
+        await message.reply(f"Имя - {name},\nid - {message.from_user.id},\nКоличество побед - {wins},\nДеньги💵 - {cash},\nНаличие админки🤗 - {admin_id}")
     else:
-        user_id = u[0]
-    await message.reply(f"Имя - {message.from_user.first_name},\nid - {message.from_user.id},\nКоличество побед - {wins},\nДеньги💵 - {money},\nНаличие админки🤗 - {user_id}") 
+        member = await message.chat.get_member(user_id)
+        if member.status == ChatMemberStatus.MEMBER:
+            role = "Обычный согрупник"
+        elif member.status == ChatMemberStatus.ADMINISTRATOR:
+            role = "Администратор"
+        elif user_id == admin:
+            role = 'Создатель бота'
+        else:
+            role = "Неизвестная роль"
+
+        await message.reply(f"Имя - {name},\nid - {message.from_user.id},\nКоличество побед - {wins},\nДеньги💵 - {cash},\nНаличие админки🤗 - {admin_id},\nРоль в группе - {role}👥")
 
 @router.message(F.text == "users")
 async def users(message: Message):
@@ -151,22 +173,27 @@ async def delete(message: Message, state: FSMContext):
     @router.message(Delete.id)
     async def delete_accept(message: Message, state: FSMContext):
             cursor.execute(f"SELECT user_id FROM admin WHERE user_id = {message.from_user.id}")
-            a = cursor.fetchall()
+            a = cursor.fetchone()
             admink = a[0]
+            cursor.execute(f"SELECT user_id FROM users WHERE user_id = {message.text}")
+            user = cursor.fetchone()
             connection.commit()
             try:
                 if message.text != 'отмена':
                     if admink != []:
-                        if int(message.text) != admin:
-                            cursor.execute("DELETE FROM users WHERE user_id = ?", (message.text,))
-                            connection.commit()
-                            await message.reply("Удаление прошло успешно!😢")
-                            await bot.send_message(admin, f"Пользователь - {message.text} удален админом - {admink}!❗️")
-                            await state.clear()
+                        if user != []:
+                            if int(message.text) != admin:
+                                cursor.execute("DELETE FROM users WHERE user_id = ?", (message.text,))
+                                connection.commit()
+                                await message.reply("Удаление прошло успешно!😢")
+                                await bot.send_message(admin, f"Пользователь - {message.text} удален админом - {admink}!❗️")
+                                await state.clear()
+                            else:
+                                await message.answer("ТЫ слишком глупп удалить владельца бота😂")
+                                await bot.send_message(admin, f"На вас пытались покушится пользователь с ID - {admink}🤦‍♂️")
+                                await state.clear()
                         else:
-                            await message.answer("ТЫ слишком глупп удалить владельца бота😂")
-                            await bot.send_message(admin, f"На вас пытались покушится пользователь с ID - {admink}🤦‍♂️")
-                            await state.clear()
+                            await message.answer("Такого пользователя нету!🤦‍♂️")
                     else:
                         await message.reply("Недастаточно прав 😂")
                         await state.clear()
@@ -190,7 +217,7 @@ async def kopat(message: Message):
             cursor.execute("UPDATE users SET cash = cash + ? WHERE user_id = ?", (500, message.from_user.id))
             connection.commit()
         else:
-            await message.answer("Заригистрируйтесь чтоб можно было зарабатывать игровуй валюту!🙂")
+            await message.answer("Зарегистрируйтесь чтоб можно было зарабатывать игровуй валюту!🙂")
 
 @router.message(Command('transfer'))
 async def transfer_pol(message: Message):

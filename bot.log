@@ -4782,3 +4782,248 @@ TypeError: 'int' object is not subscriptable
 2024-10-09 18:54:00,704 - INFO - Update id=255932528 is handled. Duration 134 ms by bot id=7431111804
 2024-10-09 18:54:02,373 - INFO - Update id=255932529 is handled. Duration 149 ms by bot id=7431111804
 2024-10-09 18:54:08,249 - INFO - Update id=255932530 is handled. Duration 177 ms by bot id=7431111804
+2024-10-09 20:21:02,064 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+2024-10-09 20:21:02,066 - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7431111804)
+2024-10-09 22:54:00,484 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+2024-10-09 22:54:00,486 - WARNING - Sleep for 1.438788 seconds and try again... (tryings = 1, bot id = 7431111804)
+2024-10-10 01:26:55,134 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+2024-10-10 01:26:55,135 - WARNING - Sleep for 1.883645 seconds and try again... (tryings = 2, bot id = 7431111804)
+2024-10-10 04:12:02,303 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+2024-10-10 04:12:02,305 - WARNING - Sleep for 2.548417 seconds and try again... (tryings = 3, bot id = 7431111804)
+2024-10-10 06:49:11,174 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+2024-10-10 06:49:11,175 - WARNING - Sleep for 3.332706 seconds and try again... (tryings = 4, bot id = 7431111804)
+2024-10-10 06:49:24,892 - INFO - Connection established (tryings = 5, bot id = 7431111804)
+2024-10-10 06:50:34,512 - INFO - Start polling
+2024-10-10 06:50:34,624 - INFO - Run polling for bot @MiruninBot id=7431111804 - 'Mirunya'
+2024-10-10 06:59:08,746 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+2024-10-10 06:59:08,749 - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7431111804)
+2024-10-10 06:59:20,207 - INFO - Connection established (tryings = 1, bot id = 7431111804)
+2024-10-10 08:22:56,762 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+2024-10-10 08:22:56,764 - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7431111804)
+2024-10-10 11:07:26,927 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+2024-10-10 11:07:26,928 - WARNING - Sleep for 1.214063 seconds and try again... (tryings = 1, bot id = 7431111804)
+2024-10-10 11:07:28,517 - INFO - Connection established (tryings = 2, bot id = 7431111804)
+2024-10-10 11:07:28,543 - INFO - Update id=255932532 is not handled. Duration 20 ms by bot id=7431111804
+2024-10-10 11:07:28,544 - INFO - Update id=255932534 is not handled. Duration 17 ms by bot id=7431111804
+2024-10-10 11:07:28,544 - INFO - Update id=255932536 is not handled. Duration 16 ms by bot id=7431111804
+2024-10-10 11:07:28,544 - INFO - Update id=255932537 is not handled. Duration 16 ms by bot id=7431111804
+2024-10-10 11:07:28,945 - INFO - Update id=255932533 is handled. Duration 419 ms by bot id=7431111804
+2024-10-10 11:07:28,992 - INFO - Polling stopped for bot @MiruninBot id=7431111804 - 'Mirunya'
+2024-10-10 11:07:28,993 - INFO - Polling stopped
+2024-10-10 11:07:29,098 - INFO - Update id=255932535 is not handled. Duration 571 ms by bot id=7431111804
+2024-10-10 11:07:29,099 - ERROR - Cause exception while process update id=255932535 by bot id=7431111804
+TelegramNetworkError: HTTP Client says - ClientConnectionError: Connector is closed.
+Traceback (most recent call last):
+  File "/Users/eleonoramamatova/Desktop/Свои игры/Bot_os/app/handlers.py", line 276, in transfer_pol
+    raise ValueError("Неверный формат команды. Используйте: /transfer <id получателя> <сумма> Пример /передача id пользователя 100")
+ValueError: Неверный формат команды. Используйте: /transfer <id получателя> <сумма> Пример /передача id пользователя 100
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/client/session/aiohttp.py", line 181, in make_request
+    async with session.post(
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiohttp/client.py", line 1353, in __aenter__
+    self._resp = await self._coro
+                 ^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiohttp/client.py", line 657, in _request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiohttp/connector.py", line 567, in connect
+    raise ClientConnectionError("Connector is closed.")
+aiohttp.client_exceptions.ClientConnectionError: Connector is closed.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 309, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 158, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/error.py", line 25, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 56, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/fsm/middleware.py", line 42, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 142, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 137, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 170, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 142, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 137, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 162, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/Bot_os/app/handlers.py", line 298, in transfer_pol
+    await message.reply(f"Ошибка: {e}")
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/methods/base.py", line 84, in emit
+    return await bot(self)
+           ^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/client/bot.py", line 488, in __call__
+    return await self.session(self, method, timeout=request_timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/client/session/base.py", line 254, in __call__
+    return cast(TelegramType, await middleware(bot, method))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/client/session/aiohttp.py", line 188, in make_request
+    raise TelegramNetworkError(method=method, message=f"{type(e).__name__}: {e}")
+aiogram.exceptions.TelegramNetworkError: HTTP Client says - ClientConnectionError: Connector is closed.
+2024-10-10 11:07:29,246 - INFO - Update id=255932531 is handled. Duration 724 ms by bot id=7431111804
+2024-10-13 12:58:51,867 - INFO - Start polling
+2024-10-13 12:58:51,973 - INFO - Run polling for bot @MiruninBot id=7431111804 - 'Mirunya'
+2024-10-13 12:59:13,430 - INFO - Update id=255932538 is handled. Duration 371 ms by bot id=7431111804
+2024-10-13 13:05:44,181 - WARNING - Received SIGINT signal
+2024-10-13 13:05:44,185 - INFO - Polling stopped for bot @MiruninBot id=7431111804 - 'Mirunya'
+2024-10-13 13:05:44,185 - INFO - Polling stopped
+2024-10-13 13:05:46,366 - INFO - Start polling
+2024-10-13 13:05:46,480 - INFO - Run polling for bot @MiruninBot id=7431111804 - 'Mirunya'
+2024-10-13 13:05:54,565 - INFO - Update id=255932539 is not handled. Duration 2 ms by bot id=7431111804
+2024-10-13 13:06:11,784 - INFO - Update id=255932540 is not handled. Duration 3 ms by bot id=7431111804
+2024-10-13 13:43:03,345 - WARNING - Received SIGINT signal
+2024-10-13 13:43:03,350 - INFO - Polling stopped for bot @MiruninBot id=7431111804 - 'Mirunya'
+2024-10-13 13:43:03,351 - INFO - Polling stopped
+2024-10-13 13:43:19,184 - INFO - Start polling
+2024-10-13 13:43:19,304 - INFO - Run polling for bot @MiruninBot id=7431111804 - 'Mirunya'
+2024-10-13 13:43:36,274 - INFO - Update id=255932541 is handled. Duration 351 ms by bot id=7431111804
+2024-10-13 13:43:49,668 - INFO - Update id=255932542 is not handled. Duration 126 ms by bot id=7431111804
+2024-10-13 13:43:49,668 - ERROR - Cause exception while process update id=255932542 by bot id=7431111804
+AttributeError: type object 'ChatMemberStatus' has no attribute 'OWNER'
+Traceback (most recent call last):
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 309, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 158, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/error.py", line 25, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 56, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/fsm/middleware.py", line 42, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 142, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 137, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 170, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 142, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 137, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 162, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/Bot_os/app/handlers.py", line 146, in info_profile
+    elif member.status == ChatMemberStatus.OWNER:
+                          ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'ChatMemberStatus' has no attribute 'OWNER'
+2024-10-13 13:43:58,869 - INFO - Update id=255932543 is not handled. Duration 178 ms by bot id=7431111804
+2024-10-13 13:43:58,869 - ERROR - Cause exception while process update id=255932543 by bot id=7431111804
+AttributeError: type object 'ChatMemberStatus' has no attribute 'OWNER'
+Traceback (most recent call last):
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 309, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 158, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/error.py", line 25, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 56, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/fsm/middleware.py", line 42, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 142, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 137, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 170, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 142, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 137, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 162, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/Users/eleonoramamatova/Desktop/Свои игры/Bot_os/app/handlers.py", line 146, in info_profile
+    elif member.status == ChatMemberStatus.OWNER:
+                          ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'ChatMemberStatus' has no attribute 'OWNER'
