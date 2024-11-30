@@ -15,7 +15,6 @@ cursor.execute("""
     house INTEGER
     )
 """)
-connection.commit()
 
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS admin(
@@ -64,3 +63,4 @@ cursor.execute("""
                tanks INTEGER
                )
 """)
+connection.commit()

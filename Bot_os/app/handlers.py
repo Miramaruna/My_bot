@@ -22,6 +22,7 @@ router = Router()
 fm_t = False
 chat_id = None
 admin = 5626265763
+num_of_kopat = 0
 
 ################################################################################
 ################################################################################
@@ -107,11 +108,11 @@ async def help(message: Message):
 
 @router.message(Command("commands"))
 async def commands(message: Message):
-    await message.answer("/start\n/info\n/help\ngeeks\nregister\n/play\n/профиль\nкопать\nФерма\n/transfer\nИнвентарь\n/shop\n/kazino\n/ban\ndelete\n/ban_admin\n/передача\nusers\nкалькулятор\nArmy\nсражаться\nдать\nудалить\n/start_game\n/mailing\nadmin\n/add_admin\nstop")
+    await message.answer("/start\n/info\n/help\ngeeks\nregister\n/play\nпрофиль\nкопать\nФерма\n/transfer\nИнвентарь\n/shop\n/kazino\n/ban\ndelete\n/ban_admin\n/передача\nusers\nкалькулятор\nArmy\nсражаться\nдать\nудалить\n/start_game\n/mailing\nadmin\n/add_admin\nstop\nTrading\nhelp_admin")
 
 @router.message(Command("info"))
 async def info(message: Message):
-    await message.reply("Привет!✋\nЭто информация о моем боте\nЯзык бота - python\nБД - Sqlite3\nБиблиотека - aiogram3\nVersion == 2.2.2💫", reply_markup=keyboard_info) 
+    await message.reply("Привет!✋\nЭто информация о моем боте\nЯзык бота - python\nБД - Sqlite3\nБиблиотека - aiogram3\nVersion == 2.2.3💫", reply_markup=keyboard_info) 
 
 @router.message(F.text == "geeks")
 async def info(message: Message):
@@ -158,14 +159,30 @@ async def info_profile(message : Message):
 
 @router.message(F.text == "users")
 async def users(message: Message):
-    cursor.execute(f"SELECT name, user_id, cash FROM users")
-    useri = cursor.fetchall()
+    cursor.execute(f"SELECT {message.from_user.id} FROM admin")
+    a = cursor.fetchone()
+    ad = a[0]
+    if ad == None:
+        cursor.execute(f"SELECT name cash FROM users")
+        useri = cursor.fetchall()
+        if useri:
+            response = "список всех пользователей:\n"
+            for user_id, cash in useri:
+                response += f"name - {user_id}, cash-{cash}\n"
+    else:
+        cursor.execute(f"SELECT name, user_id, cash FROM users")
+        useri = cursor.fetchall()
+        if useri:
+            response = "список всех пользователей:\n"
+            for user_id, name, cash in useri:
+                cursor.execute(F"SELECT user_id FROM admin WHERE user_id = {name}")
+                adm = cursor.fetchone()
+                if adm == None:
+                    admin_response = False
+                else:
+                    admin_response = True
+                response += f"id - {name}, name - {user_id}, cash-{cash}, admin-{admin_response}\n"
     connection.commit()
-    if useri:
-        response = "список всех пользователей:\n"
-        for user_id, name, cash in useri:
-            users = useri
-            response += f"id - {user_id}, name - {name}, cash-{cash}\n"
     await message.reply(f"{response}")
 
 class Delete(StatesGroup):
@@ -181,11 +198,15 @@ async def delete(message: Message, state: FSMContext):
             cursor.execute(f"SELECT user_id FROM admin WHERE user_id = {message.from_user.id}")
             a = cursor.fetchone()
             admink = a[0]
-            cursor.execute(f"SELECT user_id FROM users WHERE user_id = {message.text}")
-            user = cursor.fetchone()
-            connection.commit()
             try:
-                if message.text != 'отмена':
+                if message.text == 'отмена':
+                    print(message.text)
+                    await message.answer("Отмена✅")
+                    await state.clear()
+                else:
+                    cursor.execute(f"SELECT user_id FROM users WHERE user_id = {message.text}")
+                    user = cursor.fetchone()
+                    connection.commit()
                     if admink != []:
                         if user != []:
                             if int(message.text) != admin:
@@ -203,9 +224,6 @@ async def delete(message: Message, state: FSMContext):
                     else:
                         await message.reply("Недастаточно прав 😂")
                         await state.clear()
-                else:
-                    await message.answer("Отмена✅")
-                    await state.clear()
             except BaseException as e:
                 await message.reply("Error")
                 print(e)
@@ -216,14 +234,19 @@ async def get_photo(message: Message):
 
 @router.message(F.text == 'копать')
 async def kopat(message: Message):
+        global num_of_kopat
         cursor.execute(f"SELECT user_id FROM users WHERE user_id = {message.from_user.id}")
         p = cursor.fetchone()
-        if p != None:
-            await message.reply(f"Вы заработали: 500💵")
-            cursor.execute("UPDATE users SET cash = cash + ? WHERE user_id = ?", (500, message.from_user.id))
-            connection.commit()
+        print(num_of_kopat)
+        if num_of_kopat < 10:
+            if p != None:
+                await message.reply(f"Вы заработали: 500💵")
+                cursor.execute("UPDATE users SET cash = cash + ? WHERE user_id = ?", (500, message.from_user.id))
+                connection.commit()
+            else:
+                await message.answer("Зарегистрируйтесь чтоб можно было зарабатывать игровуй валюту!🙂")
         else:
-            await message.answer("Зарегистрируйтесь чтоб можно было зарабатывать игровуй валюту!🙂")
+            await message.answer("Ты уже использовал 10 раз команду копать дождись перезапуска бота!😡")
 
 @router.message(Command('transfer'))
 async def transfer_pol(message: Message):

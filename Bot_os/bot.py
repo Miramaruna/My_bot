@@ -33,6 +33,7 @@ bot = Bot(token=TOKEN)
 dp = Dispatcher()
 admin = 5626265763
 admin2 = 45
+Dispatcher(storage=MemoryStorage())
 
 logging.basicConfig(
 level=logging.INFO,
@@ -201,5 +202,5 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     try:
         asyncio.run(main())
-    except KeyboardInterrupt as e:
+    except BaseException as e:
         print("Exit")
