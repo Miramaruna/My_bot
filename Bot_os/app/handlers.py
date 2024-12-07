@@ -21,7 +21,7 @@ from bot import *
 router = Router()
 fm_t = False
 chat_id = None
-admin = 5626265763
+admin = 5626265763 
 num_of_kopat = 0
 
 ################################################################################
